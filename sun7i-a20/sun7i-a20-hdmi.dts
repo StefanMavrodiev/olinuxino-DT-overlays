@@ -1,0 +1,26 @@
+/dts-v1/;
+/plugin/;
+
+/ {
+	compatible = "allwinner,sun7i-a20";
+
+	fragment@0 {
+		target-path = "/";
+		__overlay__ {
+			/delete-node/ display-engine;
+
+			display-engine@0 {
+				compatible = "allwinner,sun7i-a20-display-engine";
+				allwinner,pipelines = <&fe0>;
+				status = "okay";
+			};
+
+			display-engine@1 {
+				compatible = "allwinner,sun7i-a20-display-engine";
+				allwinner,pipelines = <&fe1>;
+				status = "okay";
+			};
+		};
+	};
+
+};

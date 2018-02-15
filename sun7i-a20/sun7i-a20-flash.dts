@@ -1,0 +1,38 @@
+/dts-v1/;
+/plugin/;
+
+/ {
+	compatible = "allwinner,sun7i-a20";
+
+	fragment@0 {
+		target = <&pio>;
+		__overlay__ {
+			spi0_pins_b: spi@1 {
+				pins = "PC0", "PC1", "PC2";
+				function = "spi0";
+			};
+
+			spi0_cs0_pins_b: spi0_cs0@1 {
+				pins = "PC23";
+				function = "spi0";
+			};
+		};
+	};
+
+	fragment@1 {
+		target = <&spi0>;
+		__overlay__ {
+			pinctrl-names = "default";
+			pinctrl-0 = <&spi0_pins_b>, <&spi0_cs0_pins_b>;
+			status = "okay";
+
+			flash: w25q128@0 {
+				#address-cells = <1>;
+				#size-cells = <1>;
+				compatible = "winbond,w25q128", "jedec,spi-nor";
+				reg = <0>;
+				spi-max-frequency = <20000000>;
+			};
+		};
+	};
+};

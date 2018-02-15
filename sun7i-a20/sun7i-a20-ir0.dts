@@ -1,0 +1,16 @@
+/dts-v1/;
+/plugin/;
+
+/ {
+	compatible = "allwinner,sun7i-a20";
+
+	fragment@0 {
+		target-path = "/";
+		__overlay__ {
+			transmitter {
+				compatible = "gpio-ir-tx";
+				gpios = <&pio 1 3 0>;
+			};
+		};
+	};
+};
