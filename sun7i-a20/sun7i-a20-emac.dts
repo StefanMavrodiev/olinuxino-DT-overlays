@@ -1,3 +1,5 @@
+#include <dt-bindings/gpio/gpio.h>
+
 /dts-v1/;
 /plugin/;
 
@@ -5,49 +7,64 @@
 	compatible = "allwinner,sun7i-a20";
 
 	fragment@0 {
+		target-path = "/aliases";
+		__overlay__ {
+			ethernet2 = "/soc/ethernet@1c0b000";
+		};
+	};
+
+	fragment@1 {
+		target = <&can0>;
+		__overlay__ {
+			status = "disabled";
+		};
+	};
+
+	fragment@2 {
 		target = <&emac>;
 		__overlay__ {
 			pinctrl-names = "default";
-			pinctrl-0 = <&emac_pins_b>, <&emac_rst_pin_som204>;
+			pinctrl-0 = <&emac_pins_b>;
 			phy = <&phy1>;
 			status = "okay";
 		};
 	};
 
-	fragment@1 {
+	fragment@3 {
 		target = <&emac_sram>;
 		__overlay__ {
 			status = "okay";
 		};
 	};
 
-	fragment@2 {
-		target = <&mdio>;
+	fragment@4 {
+		target = <&pio>;
 		__overlay__ {
-			phy-supply = <&reg_vcc3v3>;
-			status = "okay";
-
-			phy1: ethernet-phy@1 {
-				reg = <1>;
+			emac_pins_b: emac0@1 {
+				pins = "PH8", "PH9", "PH10", "PH11",
+				       "PH14", "PH15", "PH16", "PH17",
+				       "PH18", "PH19", "PH20", "PH21",
+				       "PH22", "PH23", "PH24", "PH25",
+				       "PH26", "PH27";
+				function = "emac";
 			};
 		};
 	};
 
-	fragment@3 {
-		target = <&pio>;
+	fragment@5 {
+		target = <&mdio>;
 		__overlay__ {
-			emac_rst_pin_som204: emac_rst_pin_som204@0 {
-				pins = "PC18";
-				function = "gpio_out";
-			};
+			#address-cells = <1>;
+			#size-cells = <0>;
+			phy-supply = <&reg_vcc3v3>;
+			status = "okay";
 
-			emac_pins_b: emac0@1 {
-				pins = "PH8", "PH9", "PH10", "PH11",
-				"PH14", "PH15", "PH16", "PH17",
-				"PH18", "PH19", "PH20", "PH21",
-				"PH22", "PH23", "PH24", "PH25",
-				"PH26", "PH27";
-				function = "emac";
+			phy1: ethernet-phy@1 {
+				compatible = "ethernet-phy-id0007.c0f0", "ethernet-phy-ieee802.3-c22";
+				reg = <1>;
+				reset-gpios = <&pio 2 18 GPIO_ACTIVE_LOW>;
+				reset-assert-us = <1000>;
+				reset-deassert-us = <1000>;
 			};
 		};
 	};

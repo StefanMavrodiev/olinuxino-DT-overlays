@@ -7,6 +7,9 @@
 	fragment@0 {
 		target = <&i2c2>;
 		__overlay__ {
+			#address-cells = <1>;
+			#size-cells = <0>;
+			clock-frequency = <100000>;
 			atecc508a@60 {
 				compatible = "atmel,atecc508a";
 				reg = <0x60>;

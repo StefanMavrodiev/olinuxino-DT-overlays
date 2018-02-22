@@ -1,0 +1,40 @@
+#include <dt-bindings/gpio/gpio.h>
+
+/dts-v1/;
+/plugin/;
+
+/ {
+	compatible = "allwinner,sun7i-a20";
+
+	fragment@0 {
+		target-path = "/";
+		__overlay__ {
+			mmc2_pwrseq: pwrseq {
+				compatible = "mmc-pwrseq-emmc";
+				reset-gpios = <&pio 2 16 GPIO_ACTIVE_LOW>;
+			};
+		};
+	};
+
+	fragment@1 {
+		target = <&mmc2>;
+		__overlay__ {
+			#address-cells = <1>;
+			#size-cells = <0>;
+			pinctrl-names = "default";
+			pinctrl-0 = <&mmc2_pins_a>;
+			vmmc-supply = <&reg_vcc3v3>;
+			vqmmc-supply = <&reg_vcc3v3>;
+			bus-width = <4>;
+			non-removable;
+			mmc-pwrseq = <&mmc2_pwrseq>;
+			status = "okay";
+
+			emmc: emmc@0 {
+				reg = <0>;
+				compatible = "mmc-card";
+				broken-hpi;
+			};
+		};
+	};
+};
