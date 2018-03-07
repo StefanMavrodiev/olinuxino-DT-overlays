@@ -1,0 +1,11 @@
+# A20-SOM204 has LCD_PWR pin on PC24
+if test ${board_id} = 8991 || \
+   test ${board_id} = 8958; then
+	echo "Setting enable-gpios to PH8"
+	fdt get value tmp_phandle /soc@1c00000/pinctrl@1c20800 phandle
+	fdt set /panel enable-gpios "<${tmp_phandle} 2 24 0>"
+	env delete tmp_phandle
+fi
+
+# Recompile with:
+# mkimage -C none -A arm -T script -d /boot/dtb/olinuxino/lcd-olinuxino-fixup.scr-cmd /boot/dtb/olinuxino/lcd-olinuxino-fixup.scr
